@@ -1,6 +1,26 @@
 {
-	"content_scripts": [
-		"matches": ["*://*.hordes.io/play"],
-		"js": ["hma.js"]
-	]
+  "name": "Hordes Modding API",
+  "version": "0.1",
+  "description": "An extension to aid players in modding Hordes.io",
+  "permissions": ["storage", "declarativeContent", "webrequest", "activeTab"],
+  "background": {
+    "scripts": ["browser-polyfill.min.js", "background.js"],
+    "persistent": false
+  },
+  "page_action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "images/xhordes16.png",
+      "32": "images/xhordes32.png",
+      "48": "images/xhordes48.png",
+      "128": "images/xhordes128.png"
+    }
+  },
+  "icons": {
+    "16": "images/xhordes16.png",
+    "32": "images/xhordes32.png",
+    "48": "images/xhordes48.png",
+    "128": "images/xhordes128.png"
+  },
+  "manifest_version": 2
 }

@@ -1,0 +1,11 @@
+{
+  "name": "xhordes-build",
+  "version": "0.0.1",
+  "description": "The build script for xhordes",
+  "main": "build.js",
+  "scripts": {
+    "test": "node build.js"
+  },
+  "author": "Logan Henrie",
+  "license": "MIT"
+}
