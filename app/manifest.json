@@ -1,0 +1,6 @@
+{
+	"content_scripts": [
+		"matches": ["*://*.hordes.io/play"],
+		"js": ["hma.js"]
+	]
+}
