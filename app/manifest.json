@@ -1,6 +1,12 @@
 {
+	"name": "Hordes Modding API",
+	"description": "A modding API for hordes.io.",
+	"version": "0.2.0.2a",
 	"content_scripts": [
-		"matches": ["*://*.hordes.io/play"],
-		"js": ["hma.js"]
+		{
+			"matches": ["*://*.hordes.io/play"],
+			"js": ["hma.js"],
+			"run_at": "document_start"
+		}
 	]
 }
