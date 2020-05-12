@@ -2,7 +2,7 @@
   "name": "XHordes",
   "version": "0.1.0",
   "description": "A mod loader for Hordes.io",
-  "permissions": ["storage", "declarativeContent", "activeTab"],
+  "permissions": ["storage", "declarativeContent", "webRequest", "activeTab"],
   "background": {
     "scripts": ["browser-polyfill.min.js", "background.js"],
     "persistent": false
