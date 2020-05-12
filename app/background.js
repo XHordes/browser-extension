@@ -10,5 +10,3 @@ chrome.runtime.onInstalled.addListener(function(){
         }]);
       });
 })
-
-//mod loader
