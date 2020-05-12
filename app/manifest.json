@@ -1,8 +1,8 @@
 {
-  "name": "Hordes Modding API",
-  "version": "0.1",
-  "description": "An extension to aid players in modding Hordes.io",
-  "permissions": ["storage", "declarativeContent", "webrequest", "activeTab"],
+  "name": "XHordes",
+  "version": "0.1.0",
+  "description": "A mod loader for Hordes.io",
+  "permissions": ["storage", "declarativeContent", "activeTab"],
   "background": {
     "scripts": ["browser-polyfill.min.js", "background.js"],
     "persistent": false
