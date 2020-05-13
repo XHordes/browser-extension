@@ -2,10 +2,12 @@
   "name": "xhordes-build",
   "version": "0.0.1",
   "description": "The build script for xhordes",
-  "main": "build.js",
+  "main": "build.mjs",
   "scripts": {
-    "test": "node build.js"
+    "build": "node build.mjs"
   },
   "author": "Logan Henrie",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {},
+  "dependencies": {}
 }
