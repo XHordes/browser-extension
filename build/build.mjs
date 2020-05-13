@@ -2,11 +2,16 @@
 Plan:
 1. make a temp directory to copy all the relevant files into, ignoring those listed in ./buildignore.json
 2. Manipulate the files to work on chrome
+<<<<<<< HEAD
 3. Zip and place in ../dist/(version number), named chrome.crx
+=======
+3. Zip and place in ./compbuilds/(version number), named as chrome.crx
+>>>>>>> prototype
 4. Repeat for opera,firefox
 5. ???
 6. Profit
 */
+<<<<<<< HEAD
 //imports
 import fs from 'fs';
 import archiver from 'archiver'
@@ -62,3 +67,5 @@ arc.glob('tmp/**/*');
 arc.finalize();
 
 //4 repeat for opera and firefox
+=======
+>>>>>>> prototype
