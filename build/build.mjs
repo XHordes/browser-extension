@@ -32,7 +32,6 @@ async function tmpdir(dir, dest) {
 			if (!ignore[n]) {
 				await fs.opendir(`${dir}/${n}`, async (e, d) => {
 					if (!d) {
-						console.log('don\'t be racist, i am a file');
 						await fs.readFile(`${dir}/${n}`, async (e, d) => {
 							if (e) throw e;
 							await fs.writeFile(`${dest}/${n}`, d, async e => {
@@ -40,7 +39,6 @@ async function tmpdir(dir, dest) {
 							});
 						});
 					} else {
-						console.log('don\'t be racist, i am a directory');
 						await fs.mkdir(`${dest}/${n}`, {recursive: true}, async e => {
 							if (e) throw e;
 						});
@@ -78,7 +76,7 @@ fs.mkdir(`../dist/${man.version}`, {recursive: true}, e => {
 	});
 
 	arc.pipe(out);
-	arc.directory('tmp', false);
+	arc.directory('tmp', 'tmp');
 	arc.glob('tmp/**/**');
 	arc.finalize();
 
