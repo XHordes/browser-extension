@@ -63,7 +63,7 @@ fs.mkdir(`../dist/${man.version}`, {recursive: true}, e => {
 	if (e) throw e;
 });
 
-(async function(){
+(async () => {
 	await tmpdir('../app', 'tmp');
 
 	await fs.mkdir(`../dist/${man.version}`, {recursive: true}, async e => {
