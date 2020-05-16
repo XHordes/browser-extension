@@ -8,8 +8,9 @@ Plan:
 6. Profit
 */
 //imports
-import fs from 'fs';
+import fs from 'fs-extra';
 import archiver from 'archiver'
+import chrome from 'crx';
 import man from '../app/manifest.json';
 import ignore from './buildignore.json';
 
@@ -17,34 +18,41 @@ import ignore from './buildignore.json';
 fs.mkdir('tmp', {recursive: true}, e => {
 	if (e) throw e;
 });
-function copydir(dir, dest) {
-	fs.readdir(dir, (e, f) => {
+
+async function rmdir(dir) {
+	await fs.remove(dir, e => {
 		if (e) throw e;
-		f.forEach(n => {
+	});
+}
+
+async function tmpdir(dir, dest) {
+	await rmdir(dest);
+
+	await fs.readdir(dir, {recursive: true}, async (e, f) => {
+		if (e) throw e;
+		await f.forEach(async n => {
 			if (!ignore[n]) {
-				fs.opendir(`${dir}/${n}`, (e, d) => {
+				await fs.opendir(`${dir}/${n}`, async (e, d) => {
 					if (!d) {
 						console.log('don\'t be racist, i am a file');
-						fs.readFile(`${dir}/${n}`, (e, d) => {
+						await fs.readFile(`${dir}/${n}`, async (e, d) => {
 							if (e) throw e;
-							fs.writeFile(`${dest}/${n}`, d, e => {
+							await fs.writeFile(`${dest}/${n}`, d, async e => {
 								if (e) throw e;
 							});
 						});
 					} else {
 						console.log('don\'t be racist, i am a directory');
-						fs.mkdir(`${dest}/${n}`, {recursive: true}, e => {
+						await fs.mkdir(`${dest}/${n}`, {recursive: true}, async e => {
 							if (e) throw e;
 						});
-						copydir(`${dir}/${n}`, `${dest}/${n}`);
+						await tmpdir(`${dir}/${n}`, `${dest}/${n}`);
 					}
 				});
 			}
 		});
 	});
 }
-
-copydir('../app', 'tmp');
 
 //2. manipulate files to work on chrome
 
@@ -55,15 +63,21 @@ fs.mkdir(`../dist/${man.version}`, {recursive: true}, e => {
 	if (e) throw e;
 });
 
-let out = fs.createWriteStream(`../dist/${man.version}/chrome.crx`);
-let arc = archiver('zip');
+(async function(){
+	await tmpdir('../app', 'tmp');
 
-arc.on('error', e => {
-	throw e;
-});
+	const crx = new chrome({privateKey: fs.readFileSync('key.pem')});
 
-arc.pipe(out);
-arc.glob('tmp/**/**');
-arc.finalize();
+	crx.load('tmp')
+		.then(crx => crx.pack())
+		.then(buffer => {
+			fs.writeFile(`../dist/${man.version}/chrome.crx`, buffer, e => {
+				if (e) throw e;
+			});
+		})
+		.catch(e => {if (e) throw e;});
+
+	await rmdir('tmp');
+})();
 
 //4 repeat for opera and firefox
