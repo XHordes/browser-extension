@@ -2,16 +2,11 @@
 Plan:
 1. make a temp directory to copy all the relevant files into, ignoring those listed in ./buildignore.json
 2. Manipulate the files to work on chrome
-<<<<<<< HEAD
 3. Zip and place in ../dist/(version number), named chrome.crx
-=======
-3. Zip and place in ./compbuilds/(version number), named as chrome.crx
->>>>>>> prototype
 4. Repeat for opera,firefox
 5. ???
 6. Profit
 */
-<<<<<<< HEAD
 //imports
 import fs from 'fs';
 import archiver from 'archiver'
@@ -27,24 +22,29 @@ function copydir(dir, dest) {
 		if (e) throw e;
 		f.forEach(n => {
 			if (!ignore[n]) {
-				fs.opendir(`${dir}/${n}`, (e, di) => {
-					di.read((e, d) => {
-						if (d.isFile()) {
-							fs.readFile(`${dir}/${n}`, (e, d) => {
+				fs.opendir(`${dir}/${n}`, (e, d) => {
+					if (!d) {
+						console.log('don\'t be racist, i am a file');
+						fs.readFile(`${dir}/${n}`, (e, d) => {
+							if (e) throw e;
+							fs.writeFile(`${dest}/${n}`, d, e => {
 								if (e) throw e;
-								fs.writeFile(`${dest}/${n}`, d, e => {
-									if (e) throw e;
-								});
 							});
-						} else {
-							copydir(`${dir}/${n}`, `${dest}/${n}`);
-						}
-					});
+						});
+					} else {
+						console.log('don\'t be racist, i am a directory');
+						fs.mkdir(`${dest}/${n}`, {recursive: true}, e => {
+							if (e) throw e;
+						});
+						copydir(`${dir}/${n}`, `${dest}/${n}`);
+					}
 				});
 			}
 		});
 	});
 }
+
+copydir('../app', 'tmp');
 
 //2. manipulate files to work on chrome
 
@@ -55,7 +55,7 @@ fs.mkdir(`../dist/${man.version}`, {recursive: true}, e => {
 	if (e) throw e;
 });
 
-let out = new fs.createWriteStream(`../dist/${man.version}/chrome.crx`);
+let out = fs.createWriteStream(`../dist/${man.version}/chrome.crx`);
 let arc = archiver('zip');
 
 arc.on('error', e => {
@@ -63,9 +63,7 @@ arc.on('error', e => {
 });
 
 arc.pipe(out);
-arc.glob('tmp/**/*');
+arc.glob('tmp/**/**');
 arc.finalize();
 
 //4 repeat for opera and firefox
-=======
->>>>>>> prototype

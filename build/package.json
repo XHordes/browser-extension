@@ -4,20 +4,10 @@
   "description": "The build script for xhordes",
   "main": "build.mjs",
   "scripts": {
-<<<<<<< HEAD
     "build": "node --experimental-json-modules build.mjs"
   },
   "author": "Logan Henrie",
   "license": "MIT",
-  "devDependencies": {
-    "archiver": "^4.0.1"
-  },
-=======
-    "build": "node build.mjs"
-  },
-  "author": "Logan Henrie",
-  "license": "MIT",
   "devDependencies": {},
->>>>>>> prototype
   "dependencies": {}
 }
