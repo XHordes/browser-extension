@@ -76,8 +76,7 @@ fs.mkdir(`../dist/${man.version}`, {recursive: true}, e => {
 	});
 
 	arc.pipe(out);
-	arc.directory('tmp', 'tmp');
-	arc.glob('tmp/**/**');
+	arc.glob('**', {cwd: 'tmp'}, {prefix: ''});
 	arc.finalize();
 
 	fs.mkdir(`../dist/${man.version}`, {recursive: true}, e => {
