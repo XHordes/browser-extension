@@ -9,7 +9,7 @@ Plan:
 */
 //imports
 import fs from 'fs-extra';
-import archiver from 'archiver'
+import archiver from 'archiver';
 import chrome from 'crx';
 import man from '../app/manifest.json';
 import ignore from './buildignore.json';
@@ -19,15 +19,13 @@ fs.mkdir('tmp', {recursive: true}, e => {
 	if (e) throw e;
 });
 
-async function rmdir(dir) {
+/*async function rmdir(dir) {
 	await fs.remove(dir, e => {
 		if (e) throw e;
 	});
-}
+}*/
 
 async function tmpdir(dir, dest) {
-	await rmdir(dest);
-
 	await fs.readdir(dir, {recursive: true}, async (e, f) => {
 		if (e) throw e;
 		await f.forEach(async n => {
@@ -59,12 +57,34 @@ async function tmpdir(dir, dest) {
 
 //3. zip and place in ../dist/(version number), named chrome.crx
 // (don't forget to make a directory for the crx file)
+// and also make a non-distribution version for development
+
 fs.mkdir(`../dist/${man.version}`, {recursive: true}, e => {
 	if (e) throw e;
 });
 
 (async function(){
 	await tmpdir('../app', 'tmp');
+
+	await fs.mkdir(`../dist/${man.version}`, {recursive: true}, async e => {
+		if (e) throw e;
+	});
+
+	let out = fs.createWriteStream(`../dist/${man.version}/dev.zip`);
+	let arc = archiver('zip');
+
+	arc.on('error', e => {
+		throw e;
+	});
+
+	arc.pipe(out);
+	arc.directory('tmp', false);
+	arc.glob('tmp/**/**');
+	arc.finalize();
+
+	fs.mkdir(`../dist/${man.version}`, {recursive: true}, e => {
+		if (e) throw e;
+	});
 
 	const crx = new chrome({privateKey: fs.readFileSync('key.pem')});
 
@@ -76,8 +96,6 @@ fs.mkdir(`../dist/${man.version}`, {recursive: true}, e => {
 			});
 		})
 		.catch(e => {if (e) throw e;});
-
-	await rmdir('tmp');
 })();
 
 //4 repeat for opera and firefox
